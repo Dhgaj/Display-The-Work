@@ -1,0 +1,130 @@
+name: Universal Release Sync to Public Pages
+
+on:
+  workflow_dispatch:
+    inputs:
+      tag_name:
+        description: '【版本号】请输入需要同步的 Release Tag（例如 v1.0.0）'
+        required: true
+        type: string
+      public_repo:
+        description: '【目标公开仓库】静态展示页面所在的公开仓库'
+        required: true
+        default: 'Dhgaj/Display-The-Work'
+        type: string
+
+jobs:
+  sync-release:
+    runs-on: ubuntu-latest
+    steps:
+      # 1. 检出当前运行 Action 的私有仓库
+      - name: Checkout private repo
+        uses: actions/checkout@v4
+
+      # 2. 动态读取该私有仓库指定 Tag 的 Release 元数据（包含更新日志、时间等）
+      - name: Fetch Release Metadata
+        id: get_release
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const tag = context.payload.inputs.tag_name;
+            try {
+              const release = await github.rest.repos.getReleaseByTag({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                tag: tag
+              });
+              core.setOutput('name', release.data.name || tag);
+              core.setOutput('published_at', release.data.published_at);
+              // 对 Markdown 文本采用 Base64 编码，确保在 Linux 命令行中流转时不会因为中文、换行和特殊字符产生 shell 报错
+              const bodyBase64 = Buffer.from(release.data.body || "").toString("base64");
+              core.setOutput('body_base64', bodyBase64);
+            } catch (error) {
+              core.setFailed(`获取私有仓库 Tag [${tag}] 的 Release 数据失败: ${error.message}`);
+            }
+
+      # 3. 动态下载该私有仓库该 Tag 下发布的所有资产包（二进制、压缩包等）
+      - name: Download release assets
+        uses: robinraju/release-downloader@v1.8
+        with:
+          repository: "${{ github.repository }}"
+          tag: "${{ github.event.inputs.tag_name }}"
+          fileName: "*"
+          token: "${{ secrets.GITHUB_TOKEN }}"
+
+      # 4. 检出您的公开 Pages 静态仓库（使用用户在 inputs 中填写的 public_repo）
+      - name: Checkout public Pages repo
+        uses: actions/checkout@v4
+        with:
+          repository: "${{ github.event.inputs.public_repo }}"
+          path: "public-pages"
+          token: "${{ secrets.SYNC_PAT }}" # 需在私有仓库配置此 PAT 密钥以拥有写入权限
+
+      # 5. 资产拷贝与 data/releases.json 数据结构自动更新
+      - name: Merge assets and database
+        run: |
+          # 创建该版本的公开下载目录
+          mkdir -p public-pages/downloads/${{ github.event.inputs.tag_name }}
+          
+          # 将下载出来的 Release 资产文件同步复制到公开目录中
+          # 排除工作流文件和隐藏配置，只拷贝发布成果包
+          cp -r *.* public-pages/downloads/${{ github.event.inputs.tag_name }}/ || true
+          
+          cd public-pages
+          
+          # 运行 Node.js 脚本读取并修改 data/releases.json 数据库
+          node -e '
+            const fs = require("fs");
+            const dbPath = "./data/releases.json";
+            let db = [];
+            
+            // 如果 releases.json 已经存在，则读取它；否则初始化为空数组
+            if (fs.existsSync(dbPath)) {
+              try { db = JSON.parse(fs.readFileSync(dbPath, "utf8")); } catch(e) {}
+            }
+            
+            // 解码并还原 Base64 格式的更新说明
+            const body = Buffer.from(process.env.RELEASE_BODY_BASE64, "base64").toString("utf8");
+            
+            // 自动适配获取拷贝过来的资产包列表，并拼装本地公开下载链接
+            const assetsDir = "./downloads/" + process.env.TAG_NAME;
+            let fileList = [];
+            if (fs.existsSync(assetsDir)) {
+              fileList = fs.readdirSync(assetsDir)
+                .filter(file => !file.startsWith(".")) // 过滤隐藏文件
+                .map(file => ({
+                  name: file,
+                  download_url: "./downloads/" + process.env.TAG_NAME + "/" + file
+                }));
+            }
+            
+            const newRelease = {
+              tag_name: process.env.TAG_NAME,
+              name: process.env.RELEASE_NAME,
+              published_at: process.env.PUBLISHED_AT,
+              body: body,
+              assets: fileList
+            };
+            
+            // 去重（如发布过同名 Tag，则以最新同步的数据为准）并推送到列表最顶部
+            db = db.filter(r => r.tag_name !== newRelease.tag_name);
+            db.unshift(newRelease);
+            
+            // 写入更新
+            fs.writeFileSync(dbPath, JSON.stringify(db, null, 2), "utf8");
+          '
+        env:
+          TAG_NAME: ${{ github.event.inputs.tag_name }}
+          RELEASE_NAME: ${{ steps.get_release.outputs.name }}
+          PUBLISHED_AT: ${{ steps.get_release.outputs.published_at }}
+          RELEASE_BODY_BASE64: ${{ steps.get_release.outputs.body_base64 }}
+
+      # 6. 自动提交修改至公开仓库，触发 GitHub Pages 静态网站重新编译部署
+      - name: Commit and Push to public Pages repo
+        run: |
+          cd public-pages
+          git config --global user.name "github-actions[bot]"
+          git config --global user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add downloads/ data/releases.json
+          git commit -m "chore: auto-sync release ${{ github.event.inputs.tag_name }} from ${{ github.repository }}"
+          git push origin main

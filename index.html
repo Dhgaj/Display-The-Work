@@ -1,0 +1,53 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>作品发布中心 - 极简私有版本同步</title>
+
+    <!-- 内联 SVG Favicon -->
+    <link
+      rel="icon"
+      href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2280%22>🚀</text></svg>"
+    />
+
+    <link rel="stylesheet" href="./index.css" />
+
+    <!-- 引入 Marked.js 用于渲染 Markdown 文本 -->
+    <script
+      src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"
+      defer
+    ></script>
+  </head>
+  <body>
+    <div class="container">
+      <header class="header" id="app-header">
+        <div class="header-badge">PRIVATE RELEASES</div>
+        <h1>版本发布中心</h1>
+        <p>提供私有仓库手动发布的稳定版本及资产下载</p>
+      </header>
+
+      <!-- 动态渲染容器 -->
+      <main class="releases-list" id="releases-container">
+        <!-- 骨架屏占位 -->
+        <div class="release-card skeleton-card"></div>
+        <div class="release-card skeleton-card"></div>
+      </main>
+
+      <footer class="footer">
+        <p>© 2026 Display-The-Work.</p>
+        <p style="margin-top: 8px; font-size: 0.8rem">
+          构建状态：<span style="color: #10b981">● 正常运行</span> |
+          <a
+            href="https://github.com/Dhgaj"
+            target="_blank"
+            rel="noopener noreferrer"
+            >GitHub 账户</a
+          >
+        </p>
+      </footer>
+    </div>
+
+    <script src="./index.js" defer></script>
+  </body>
+</html>
