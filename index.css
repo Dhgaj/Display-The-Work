@@ -1,30 +1,39 @@
 /* 字体引入 */
-@import url('https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&display=swap');
+@import url("https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&display=swap");
 
 /* 全局变量与设计系统 */
 :root {
-  --font-sans: 'Outfit', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
-  
+  --font-sans:
+    "Outfit", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+
   /* 色彩系统 */
   --bg-dark: #070913;
   --bg-card: rgba(255, 255, 255, 0.03);
   --border-card: rgba(255, 255, 255, 0.08);
-  
-  --primary-glow: radial-gradient(circle, rgba(139, 92, 246, 0.15) 0%, rgba(0, 0, 0, 0) 70%);
-  --secondary-glow: radial-gradient(circle, rgba(59, 130, 246, 0.15) 0%, rgba(0, 0, 0, 0) 70%);
-  
+
+  --primary-glow: radial-gradient(
+    circle,
+    rgba(139, 92, 246, 0.15) 0%,
+    rgba(0, 0, 0, 0) 70%
+  );
+  --secondary-glow: radial-gradient(
+    circle,
+    rgba(59, 130, 246, 0.15) 0%,
+    rgba(0, 0, 0, 0) 70%
+  );
+
   /* 渐变色定义 */
-  --color-primary: #8B5CF6;
-  --color-secondary: #3B82F6;
-  --grad-primary: linear-gradient(135deg, #8B5CF6 0%, #EC4899 100%);
-  --grad-secondary: linear-gradient(135deg, #3B82F6 0%, #06B6D4 100%);
-  --grad-text: linear-gradient(180deg, #FFFFFF 0%, #A5B4FC 100%);
-  
+  --color-primary: #8b5cf6;
+  --color-secondary: #3b82f6;
+  --grad-primary: linear-gradient(135deg, #8b5cf6 0%, #ec4899 100%);
+  --grad-secondary: linear-gradient(135deg, #3b82f6 0%, #06b6d4 100%);
+  --grad-text: linear-gradient(180deg, #ffffff 0%, #a5b4fc 100%);
+
   /* 基础文本与投影 */
-  --text-main: #F3F4F6;
-  --text-muted: #9CA3AF;
+  --text-main: #f3f4f6;
+  --text-muted: #9ca3af;
   --shadow-glow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
-  
+
   /* 过渡动效 */
   --transition-smooth: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
 }
@@ -47,7 +56,8 @@ body {
 }
 
 /* 背景装饰层 */
-body::before, body::after {
+body::before,
+body::after {
   content: "";
   position: fixed;
   width: 600px;
@@ -93,7 +103,7 @@ body::after {
   border: 1px solid rgba(139, 92, 246, 0.2);
   border-radius: 100px;
   font-size: 0.85rem;
-  color: #C084FC;
+  color: #c084fc;
   font-weight: 500;
   letter-spacing: 0.05em;
   margin-bottom: 20px;
@@ -154,7 +164,11 @@ body::after {
   left: 0;
   width: 100%;
   height: 100%;
-  background: linear-gradient(135deg, rgba(255,255,255,0.05) 0%, rgba(255,255,255,0) 50%);
+  background: linear-gradient(
+    135deg,
+    rgba(255, 255, 255, 0.05) 0%,
+    rgba(255, 255, 255, 0) 50%
+  );
   pointer-events: none;
   z-index: 0;
 }
@@ -181,7 +195,7 @@ body::after {
 /* 版本标签 */
 .tag-badge {
   background: var(--grad-primary);
-  color: #FFFFFF;
+  color: #ffffff;
   font-weight: 700;
   padding: 6px 16px;
   border-radius: 12px;
@@ -193,7 +207,7 @@ body::after {
 .release-title {
   font-size: 1.4rem;
   font-weight: 600;
-  color: #FFFFFF;
+  color: #ffffff;
 }
 
 .release-time {
@@ -205,14 +219,14 @@ body::after {
 /* Markdown 渲染样式 */
 .release-body {
   font-size: 1rem;
-  color: #D1D5DB;
+  color: #d1d5db;
   margin-bottom: 32px;
   position: relative;
   z-index: 1;
 }
 
 .release-body h3 {
-  color: #FFFFFF;
+  color: #ffffff;
   margin: 24px 0 12px 0;
   font-size: 1.15rem;
   font-weight: 600;
@@ -248,7 +262,7 @@ body::after {
   padding: 12px 20px;
   border-radius: 4px 12px 12px 4px;
   margin: 20px 0;
-  color: #9CA3AF;
+  color: #9ca3af;
   font-style: italic;
 }
 
@@ -269,7 +283,7 @@ body::after {
 
 .assets-list {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
   gap: 16px;
 }
 
@@ -281,14 +295,12 @@ body::after {
   border: 1px solid rgba(255, 255, 255, 0.05);
   border-radius: 16px;
   padding: 16px 20px;
-  color: #FFFFFF;
+  color: #ffffff;
   text-decoration: none;
   font-weight: 500;
   font-size: 0.95rem;
   transition: var(--transition-smooth);
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
+  min-height: 76px; /* 设为自适应的最小高度，在折行时完美适配 */
 }
 
 .asset-button:hover {
@@ -306,14 +318,14 @@ body::after {
   height: 36px;
   background: rgba(59, 130, 246, 0.1);
   border-radius: 10px;
-  color: #60A5FA;
+  color: #60a5fa;
   flex-shrink: 0;
   transition: var(--transition-smooth);
 }
 
 .asset-button:hover .asset-icon {
   background: var(--grad-secondary);
-  color: #FFFFFF;
+  color: #ffffff;
 }
 
 .asset-meta {
@@ -324,9 +336,9 @@ body::after {
 
 .asset-name {
   font-weight: 500;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
+  white-space: normal; /* 解除单行截断，允许换行完整展示 */
+  word-break: break-all; /* 防止长字母或单词溢出，智能从合适位置截断折行 */
+  line-height: 1.4; /* 微调折行行高以匹配高级质感 */
 }
 
 .asset-size {
@@ -338,7 +350,12 @@ body::after {
 /* 骨架屏及状态样式 */
 .skeleton-card {
   height: 280px;
-  background: linear-gradient(90deg, rgba(255, 255, 255, 0.03) 25%, rgba(255, 255, 255, 0.06) 50%, rgba(255, 255, 255, 0.03) 75%);
+  background: linear-gradient(
+    90deg,
+    rgba(255, 255, 255, 0.03) 25%,
+    rgba(255, 255, 255, 0.06) 50%,
+    rgba(255, 255, 255, 0.03) 75%
+  );
   background-size: 200% 100%;
   animation: loadingShimmer 1.5s infinite;
   border: 1px solid var(--border-card);
@@ -360,7 +377,7 @@ body::after {
   background: rgba(239, 68, 68, 0.05);
   border: 1px solid rgba(239, 68, 68, 0.2);
   border-radius: 24px;
-  color: #FCA5A5;
+  color: #fca5a5;
 }
 
 /* 页面页脚 */
@@ -408,8 +425,12 @@ body::after {
 }
 
 @keyframes loadingShimmer {
-  0% { background-position: 200% 0; }
-  100% { background-position: -200% 0; }
+  0% {
+    background-position: 200% 0;
+  }
+  100% {
+    background-position: -200% 0;
+  }
 }
 
 /* 版权声明样式 */
@@ -435,7 +456,7 @@ body::after {
   display: flex;
   align-items: center;
   justify-content: center;
-  color: #F59E0B; /* 琥珀色 */
+  color: #f59e0b; /* 琥珀色 */
   flex-shrink: 0;
   margin-top: 2px; /* 补足微弱像素差，完美对齐首行文字中心 */
   animation: pulseGlow 3s infinite ease-in-out;
@@ -443,17 +464,18 @@ body::after {
 
 .notice-content {
   font-size: 0.95rem;
-  color: #D1D5DB;
+  color: #d1d5db;
   line-height: 1.6;
 }
 
 .notice-content strong {
-  color: #F59E0B;
+  color: #f59e0b;
   font-weight: 600;
 }
 
 @keyframes pulseGlow {
-  0%, 100% {
+  0%,
+  100% {
     transform: scale(1);
     opacity: 0.9;
   }
