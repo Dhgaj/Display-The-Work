@@ -1,1 +1,10 @@
-[]
+[
+  {
+    "repo_name": "youdao-extension",
+    "tag_name": "v1.1.0",
+    "name": "Youdao Wordbook Exporter v1.1.0",
+    "published_at": "2026-05-29T04:15:34Z",
+    "body": "## 安装方法\n\n### 方式一：CRX 文件安装（推荐）\n1. 下载 `youdao-wordbook-exporter.crx`\n2. 打开 Chrome → `chrome://extensions/` → 开启开发者模式\n3. 将 `.crx` 文件拖入页面即可安装\n\n### 方式二：ZIP 解压安装\n1. 下载 `youdao-wordbook-exporter.zip` 并解压\n2. 打开 Chrome → `chrome://extensions/` → 开启开发者模式\n3. 点击「加载已解压的扩展程序」选择解压后的文件夹\n\n> ⚠️ 本项目采用 CC BY-NC 4.0 协议，禁止商业用途。\n",
+    "assets": []
+  }
+]
