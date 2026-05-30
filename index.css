@@ -415,7 +415,7 @@ body::after {
 /* 版权声明样式 */
 .copyright-notice {
   display: flex;
-  align-items: center;
+  align-items: flex-start; /* 设为顶部对齐，防止长文本换行时图标位置尴尬 */
   gap: 16px;
   background: rgba(245, 158, 11, 0.03); /* HSL 琥珀微光背景 */
   backdrop-filter: blur(12px);
@@ -437,6 +437,7 @@ body::after {
   justify-content: center;
   color: #F59E0B; /* 琥珀色 */
   flex-shrink: 0;
+  margin-top: 2px; /* 补足微弱像素差，完美对齐首行文字中心 */
   animation: pulseGlow 3s infinite ease-in-out;
 }
 
