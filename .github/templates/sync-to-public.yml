@@ -4,13 +4,13 @@ on:
   workflow_dispatch:
     inputs:
       tag_name:
-        description: '【版本号】请输入需要同步的 Release Tag（例如 v1.0.0）'
+        description: "【版本号】请输入需要同步的 Release Tag（例如 v1.0.0）"
         required: true
         type: string
       public_repo:
-        description: '【目标公开仓库】静态展示页面所在的公开仓库'
+        description: "【目标公开仓库】静态展示页面所在的公开仓库"
         required: true
-        default: 'Dhgaj/Display-The-Work'
+        default: "Dhgaj/Display-The-Work"
         type: string
 
 jobs:
@@ -51,6 +51,7 @@ jobs:
           tag: "${{ github.event.inputs.tag_name }}"
           fileName: "*"
           token: "${{ secrets.GITHUB_TOKEN }}"
+          out: "downloaded-assets" # 专门指定独立的下载目录，完全隔离源码文件，防止源码同步泄露
 
       # 4. 检出您的公开 Pages 静态仓库（使用用户在 inputs 中填写的 public_repo）
       - name: Checkout public Pages repo
@@ -58,20 +59,20 @@ jobs:
         with:
           repository: "${{ github.event.inputs.public_repo }}"
           path: "public-pages"
-          token: "${{ secrets.SYNC_PAT }}" # 需在私有仓库配置此 PAT 密钥以拥有写入权限
+          # 需在私有仓库配置此 PAT 密钥以拥有写入权限
+          token: "${{ secrets.SYNC_PAT }}"
 
       # 5. 资产拷贝与 data/releases.json 数据结构自动更新
       - name: Merge assets and database
         run: |
-          # 创建该版本的公开下载目录
-          mkdir -p public-pages/downloads/${{ github.event.inputs.tag_name }}
-          
-          # 将下载出来的 Release 资产文件同步复制到公开目录中
-          # 排除工作流文件和隐藏配置，只拷贝发布成果包
-          cp -r *.* public-pages/downloads/${{ github.event.inputs.tag_name }}/ || true
-          
+          # 创建该版本的公开下载目录，采用 软件名/版本号 的完美隔离结构
+          mkdir -p public-pages/downloads/${{ github.event.repository.name }}/${{ github.event.inputs.tag_name }}
+
+          # 精准拷贝下载目录中的 Release 资产包到公开静态页面目录下，完全排除私有仓库源码
+          cp -r downloaded-assets/* public-pages/downloads/${{ github.event.repository.name }}/${{ github.event.inputs.tag_name }}/ || true
+
           cd public-pages
-          
+
           # 运行 Node.js 脚本读取并修改 data/releases.json 数据库
           node -e '
             const fs = require("fs");
@@ -87,18 +88,20 @@ jobs:
             const body = Buffer.from(process.env.RELEASE_BODY_BASE64, "base64").toString("utf8");
             
             // 自动适配获取拷贝过来的资产包列表，并拼装本地公开下载链接
-            const assetsDir = "./downloads/" + process.env.TAG_NAME;
+            const assetsDir = "./downloads/" + process.env.REPO_NAME + "/" + process.env.TAG_NAME;
             let fileList = [];
             if (fs.existsSync(assetsDir)) {
               fileList = fs.readdirSync(assetsDir)
                 .filter(file => !file.startsWith(".")) // 过滤隐藏文件
                 .map(file => ({
                   name: file,
-                  download_url: "./downloads/" + process.env.TAG_NAME + "/" + file
+                  download_url: "./downloads/" + process.env.REPO_NAME + "/" + process.env.TAG_NAME + "/" + file
                 }));
             }
             
             const newRelease = {
+              // 登记私有软件名称，防跨项目同名版本号冲突
+              repo_name: process.env.REPO_NAME, 
               tag_name: process.env.TAG_NAME,
               name: process.env.RELEASE_NAME,
               published_at: process.env.PUBLISHED_AT,
@@ -106,14 +109,15 @@ jobs:
               assets: fileList
             };
             
-            // 去重（如发布过同名 Tag，则以最新同步的数据为准）并推送到列表最顶部
-            db = db.filter(r => r.tag_name !== newRelease.tag_name);
+            // 精准去重（只有当软件名和版本号均相同时才去重，防止误杀其他软件的同名 Tag）并推送到列表最顶部
+            db = db.filter(r => !(r.tag_name === newRelease.tag_name && r.repo_name === newRelease.repo_name));
             db.unshift(newRelease);
             
             // 写入更新
             fs.writeFileSync(dbPath, JSON.stringify(db, null, 2), "utf8");
           '
         env:
+          REPO_NAME: ${{ github.event.repository.name }}
           TAG_NAME: ${{ github.event.inputs.tag_name }}
           RELEASE_NAME: ${{ steps.get_release.outputs.name }}
           PUBLISHED_AT: ${{ steps.get_release.outputs.published_at }}

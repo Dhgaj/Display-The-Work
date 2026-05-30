@@ -52,7 +52,7 @@ document.addEventListener('DOMContentLoaded', () => {
   // 异步获取并渲染版本列表
   async function fetchReleases() {
     try {
-      const response = await fetch('./data/releases.json');
+      const response = await fetch('./data/releases.json?t=' + Date.now());
       if (!response.ok) {
         throw new Error(`HTTP 状态码异常: ${response.status}`);
       }
