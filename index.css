@@ -412,6 +412,57 @@ body::after {
   100% { background-position: -200% 0; }
 }
 
+/* 版权声明样式 */
+.copyright-notice {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  background: rgba(245, 158, 11, 0.03); /* HSL 琥珀微光背景 */
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid rgba(245, 158, 11, 0.15);
+  border-radius: 20px;
+  padding: 18px 24px;
+  margin-top: 40px;
+  box-shadow: var(--shadow-glow);
+  animation: fadeInUp 0.8s cubic-bezier(0.16, 1, 0.3, 1) both;
+  animation-delay: 0.2s;
+  position: relative;
+  z-index: 1;
+}
+
+.notice-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #F59E0B; /* 琥珀色 */
+  flex-shrink: 0;
+  animation: pulseGlow 3s infinite ease-in-out;
+}
+
+.notice-content {
+  font-size: 0.95rem;
+  color: #D1D5DB;
+  line-height: 1.6;
+}
+
+.notice-content strong {
+  color: #F59E0B;
+  font-weight: 600;
+}
+
+@keyframes pulseGlow {
+  0%, 100% {
+    transform: scale(1);
+    opacity: 0.9;
+  }
+  50% {
+    transform: scale(1.08);
+    opacity: 1;
+    filter: drop-shadow(0 0 4px rgba(245, 158, 11, 0.5));
+  }
+}
+
 /* 响应式适配 */
 @media (max-width: 640px) {
   .header h1 {
@@ -426,5 +477,11 @@ body::after {
   }
   .assets-list {
     grid-template-columns: 1fr;
+  }
+  .copyright-notice {
+    padding: 16px 20px;
+    gap: 12px;
+    flex-direction: column;
+    text-align: center;
   }
 }

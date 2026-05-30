@@ -45,9 +45,11 @@ Display-The-Work/
 要把此页面配置为某个私人仓库（如插件、桌面客户端、命令行工具等）的发布页面，只需执行以下三个步骤：
 
 ### 步骤 1：在私有仓库中创建工作流文件
+
 直接复制本公开仓库中 `[.github/templates/sync-to-public.yml](.github/templates/sync-to-public.yml)` 的内容，保存到**私有仓库**的 `.github/workflows/sync-to-public.yml` 文件中。
 
 ### 步骤 2：在私有仓库中配置公开仓库写入密钥 (`SYNC_PAT`)
+
 1. **生成 Token (Classic)**：
    - 访问路径：`GitHub 头像` -> `Settings` -> `Developer settings` -> `Personal access tokens` -> `Tokens (classic)`。
    - 点击 `Generate new token`，**勾选 `public_repo`** 权限（如果当前的 `Display-The-Work` 是公开仓库）。
@@ -58,6 +60,7 @@ Display-The-Work/
    - 点击右上角的 `New repository secret`，名称（Name）填入：**`SYNC_PAT`**，内容（Value）填入刚才生成的 Token 秘钥，点击保存。
 
 ### 步骤 3：一键运行手动分发
+
 1. 访问**私有开发仓库**的 `Actions` 选项卡，在左侧选择 `Universal Release Sync to Public Pages` 工作流。
 2. 点击右侧的 `Run workflow` 绿色下拉按钮：
    - **【版本号】** 输入需要对外公开下载的私有 Release Tag（例如 `v1.2.0`）。
@@ -81,3 +84,14 @@ Display-The-Work/
    ```
 3. **在浏览器中访问**：
    👉 **[http://localhost:8088](http://localhost:8088)**
+
+---
+
+## 📄 许可证与版权声明 (LICENSE)
+
+本项目采用专属的 **非商业化使用许可证 (Display-The-Work License)** 进行授权：
+
+1. **禁止商用**：本软件及其任何发布的版本、编译产物、更新日志以及相关资产（源代码、二进制文件、压缩包、图片等）仅供**个人学习、学术研究、技术预览**使用。严禁将本项目任何部分用于任何形式的商业盈利目的。
+2. **免责声明**：本软件按“原样”提供，作者不承担因使用本软件产生的任何明示或暗示的法律责任。
+
+详细的条款内容请参阅项目根目录下的 [LICENSE](./LICENSE) 证书文件。
