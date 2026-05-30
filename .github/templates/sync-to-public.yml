@@ -51,7 +51,7 @@ jobs:
           tag: "${{ github.event.inputs.tag_name }}"
           fileName: "*"
           token: "${{ secrets.GITHUB_TOKEN }}"
-          out: "downloaded-assets" # 专门指定独立的下载目录，完全隔离源码文件，防止源码同步泄露
+          out-file-path: "downloaded-assets" # 🎯 专门指定独立的下载目录，完全隔离源码文件，防止源码同步泄露
 
       # 4. 检出您的公开 Pages 静态仓库（使用用户在 inputs 中填写的 public_repo）
       - name: Checkout public Pages repo
