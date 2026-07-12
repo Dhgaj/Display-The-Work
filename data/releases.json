@@ -3,8 +3,8 @@
     "repo_name": "VidBuddy",
     "tag_name": "v1.0.0",
     "name": "VidBuddy v1.0.0",
-    "published_at": "2026-07-12T17:38:13Z",
-    "body": "## 安装方法\n\n### 方式一：ZIP 解压安装（官方推荐 🌟）\n1. 下载 `VidBuddy-vv1.0.0.zip` 并解压。\n2. 打开 Chrome → `chrome://extensions/` 并开启右上角**「开发者模式」**。\n3. 点击左上角**「加载已解压的扩展程序」**，选择刚才解压出来的文件夹即可！\n\n### 方式二：CRX 文件安装（可选）\n1. 下载 `VidBuddy-vv1.0.0.crx`。\n2. 打开 Chrome → `chrome://extensions/` 并开启开发者模式。\n3. 将 `.crx` 文件拖入页面即可安装。\n\n> ⚠️ **关于方式二的极客提醒**：\n> * **官方 Chrome 浏览器**：现代官方 Chrome 强制校验 Google 商店颁发的 Proof 证明。直接拖拽离线 `.crx` 包会被系统安全沙箱拦截并抛出 `CRX_REQUIRED_PROOF_MISSING` 报错。**因此官方 Chrome 用户请务必使用「方式一：ZIP解压安装」（体验完全一致且 100% 成功）**。\n> * **第三方 Chromium 浏览器**：国内众多优秀的双核浏览器通常免除 Proof 强校验，依然支持直接双击/拖拽本 `.crx` 文件一秒免审加载安装！\n> * **企业级批量下发用户**：本签名 CRX 包锁定唯一固定的 Extension ID，支持且完全适用于企业域组策略（GPO/MDM）通过注册表 `ExtensionInstallForcelist` 进行批量强制静默分发部署！\n",
+    "published_at": "2026-07-12T18:04:55Z",
+    "body": "## 安装方法\n\n1. 下载 `VidBuddy-v1.0.0.zip` 并解压。\n2. 打开 Chrome → `chrome://extensions/` 并开启右上角「开发者模式」。\n3. 点击左上角「加载已解压的扩展程序」，选择刚才解压出来的文件夹即可！\n",
     "assets": [
       {
         "name": "VidBuddy-v1.0.0.zip",
