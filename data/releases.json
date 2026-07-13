@@ -1,6 +1,23 @@
 [
   {
     "repo_name": "VidBuddy",
+    "tag_name": "v1.0.1",
+    "name": "VidBuddy v1.0.1",
+    "published_at": "2026-07-13T04:45:26Z",
+    "body": "## 安装方法\r\n\r\n1. 下载 `VidBuddy-v1.0.1.zip` 并解压。\r\n2. 打开 Chrome → `chrome://extensions/` 并开启右上角「开发者模式」。\r\n3. 点击左上角「加载已解压的扩展程序」，选择刚才解压出来的文件夹即可！\r\n\r\n## FIX\r\n\r\n1. 优化部分 UI\r\n2. 修复截屏展示和截屏标记点相关问题",
+    "assets": [
+      {
+        "name": "VidBuddy-v1.0.1.zip",
+        "download_url": "./downloads/VidBuddy/v1.0.1/VidBuddy-v1.0.1.zip"
+      },
+      {
+        "name": "VidBuddy.zip",
+        "download_url": "./downloads/VidBuddy/v1.0.1/VidBuddy.zip"
+      }
+    ]
+  },
+  {
+    "repo_name": "VidBuddy",
     "tag_name": "v1.0.0",
     "name": "VidBuddy v1.0.0",
     "published_at": "2026-07-12T18:04:55Z",
